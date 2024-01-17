@@ -4,18 +4,11 @@ program EST
 
   include 'parameters.h'
 
-  integer                       :: nAt,nBas,nEl,nO,nV
+  integer                       :: nNuc,nBas,nEl,nO,nV
   double precision              :: ENuc,EHF
 
   double precision,allocatable  :: ZNuc(:)
-  double precision,allocatable  :: rAt(:,:)
-
-  integer                       :: nShell
-  integer,allocatable           :: TotAngMomShell(:)
-  integer,allocatable           :: KShell(:)
-  double precision,allocatable  :: CenterShell(:,:)
-  double precision,allocatable  :: DShell(:,:)
-  double precision,allocatable  :: ExpShell(:,:)
+  double precision,allocatable  :: rNuc(:,:)
 
   double precision,allocatable  :: S(:,:)
   double precision,allocatable  :: T(:,:)
@@ -36,7 +29,7 @@ program EST
 
   write(*,*)
   write(*,*) '***************************'
-  write(*,*) '* TCCM winter school 2023 *'
+  write(*,*) '* TCCM winter school 2024 *'
   write(*,*) '***************************'
   write(*,*)
 
@@ -50,21 +43,18 @@ program EST
 ! nBas = number of basis functions (see below)
 !      = nO + nV
 
-  call read_molecule(nAt,nEl,nO)
-  allocate(ZNuc(nAt),rAt(nAt,3))
+  call read_molecule(nNuc,nEl,nO)
+  allocate(ZNuc(nNuc),rNuc(nNuc,3))
 
 ! Read geometry
 
-  call read_geometry(nAt,ZNuc,rAt,ENuc)
-
-  allocate(CenterShell(maxShell,3),TotAngMomShell(maxShell),KShell(maxShell), &
-           DShell(maxShell,maxK),ExpShell(maxShell,maxK))
+  call read_geometry(nNuc,ZNuc,rNuc,ENuc)
 
 !------------------------------------------------------------------------
 ! Read basis set information
 !------------------------------------------------------------------------
 
-  call read_basis(nAt,rAt,nBas,nO,nV,nShell,TotAngMomShell,CenterShell,KShell,DShell,ExpShell)
+  call read_basis(nBas,nO,nV)
 
 !------------------------------------------------------------------------
 ! Read one- and two-electron integrals
